@@ -41,7 +41,7 @@ namespace Chess
             previousInput = new Input();
             currentInput = new Input();
 
-            
+
             base.Initialize();
         }
 
@@ -77,7 +77,7 @@ namespace Chess
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
-            screenManager.Draw(gameTime,spriteBatch);
+            screenManager.Draw(gameTime, spriteBatch);
 
             base.Draw(gameTime);
         }

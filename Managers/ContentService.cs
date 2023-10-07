@@ -50,10 +50,10 @@ namespace Chess.Managers
             }
             _content = Content;
 
-            AddTexture("Sprites\\WhiteEmpty", "Empty");
-            AddTexture("Sprites\\Circle", "Circle");
+            AddTexture("Sprites/WhiteEmpty", "Empty");
+            AddTexture("Sprites/Circle", "Circle");
 
-            Texture2D texture = _content.Load<Texture2D>("Sprites\\ChessPieces");
+            Texture2D texture = _content.Load<Texture2D>("Sprites/ChessPieces");
 
             Texture2D target = new Texture2D(graphicsDevice, 100, 100);
             Color[] data = new Color[100 * 100];
