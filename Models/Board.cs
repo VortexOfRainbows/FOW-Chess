@@ -175,10 +175,10 @@ namespace Chess.Models
             {
                 for (int j = 0; j < 8; j++)
                 {
-                    grid[i, j].Draw(spriteBatch);
+                    grid[i, j].Draw(spriteBatch); //THIS DRAWS THE SQUARES
                 }
             }
-            whites.Draw(spriteBatch);
+            whites.Draw(spriteBatch); //THIS DRAWS THE PIECES
             blacks.Draw(spriteBatch);
         }
 
@@ -281,6 +281,7 @@ namespace Chess.Models
                     piece.UnMarkAnimation = new ButtonAnimation(null, new Rectangle(board[row, col].Bounds.Location, new Point(Constants.PIESESIZE, Constants.PIESESIZE)), null, true);
                 }
             }
+            Piece.Points = new List<Point>();
             for (int i = 0; i < 8; i++)
             {
                 for (int j = 0; j < 8; j++)

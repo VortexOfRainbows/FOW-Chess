@@ -25,6 +25,7 @@ namespace Chess.Models
 
     abstract class Piece : OptionsButton
     {
+        public static List<Point> Points = new List<Point>();
         public int NumberOfMoves { get; private set; } = 0;
         protected List<Button> legals;
         protected Texture2D legalsTexture;
@@ -66,9 +67,28 @@ namespace Chess.Models
             {
                 DrawLegalMoves(spriteBatch);
             }
-            base.Draw(spriteBatch);
+            if(IsVisible())
+                base.Draw(spriteBatch); //Draw the actual pieces
         }
-
+        public bool IsVisible()
+        {
+            if(board.Turn == Turn.Player2 && color == ChessColor.Black)
+            {
+                return true;
+            }
+            if (board.Turn == Turn.Player1 && color == ChessColor.White)
+            {
+                return true;
+            }
+            foreach(Point p in Points)
+            {
+                if(p.X == Row && p.Y == Col)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
         public void Move(int row, int col)
         {
             NumberOfMoves++;
@@ -77,13 +97,14 @@ namespace Chess.Models
             Center(new Rectangle(col * Constants.TILESIZE, row * Constants.TILESIZE, Constants.TILESIZE, Constants.TILESIZE));
         }
 
-        protected void AddLegalMove(int r, int c)
+        protected void AddLegalMove(int row, int col)
         {
-            Button b = new Button(new Sprite2D(legalsTexture, new Rectangle(c * Constants.TILESIZE, r * Constants.TILESIZE, Constants.TILESIZE, Constants.TILESIZE), Color.DarkSlateGray));
-            b.Click += (s, e) => { Move(r, c); };
+            Button b = new Button(new Sprite2D(legalsTexture, new Rectangle(col * Constants.TILESIZE, row * Constants.TILESIZE, Constants.TILESIZE, Constants.TILESIZE), Color.DarkSlateGray));
+            b.Click += (s, e) => { Move(row, col); };
             b.Hover += (s, e) => { b.Color = Color.Black; };
             b.UnHover += (s, e) => { b.Color = Color.DarkSlateGray; };
             legals.Add(b);
+            Points.Add(new Point(row, col));
         }
 
         public abstract void CalculateLegalMoves();

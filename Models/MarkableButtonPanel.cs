@@ -54,7 +54,7 @@ namespace Chess.Models
         {
             for (int i = 0; i < _panel.Count; i++)
             {
-                _panel[i].UnMark();
+                _panel[i].UnMark(); //This is what gets rid of a move "availability" indicator
             }
         }
 
