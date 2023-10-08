@@ -281,7 +281,7 @@ namespace Chess.Models
                     piece.UnMarkAnimation = new ButtonAnimation(null, new Rectangle(board[row, col].Bounds.Location, new Point(Constants.PIESESIZE, Constants.PIESESIZE)), null, true);
                 }
             }
-            Piece.Points = new List<Point>();
+            Piece.Points = new HashSet<Point>();
             for (int i = 0; i < 8; i++)
             {
                 for (int j = 0; j < 8; j++)
@@ -289,6 +289,20 @@ namespace Chess.Models
                     if (board[i, j] != null)
                     {
                         board[i, j].CalculateLegalMoves();
+                        if (!board[i, j].IsCurrentPlayerPiece())
+                        {
+                            for (int i2 = -1; i2 <= 1; i2++)
+                            {
+                                for (int j2 = -1; j2 <= 1; j2++)
+                                {
+                                    Point p2 = new Point(i + i2, j + j2);
+                                    if (!Piece.Points.Contains(p2) && p2.X >= 0 && p2.X < 8 && p2.Y >= 0 && p2.Y < 8)
+                                    {
+                                        Piece.Points.Add(p2);
+                                    }
+                                }
+                            }
+                        }
                     }
                 }
             }

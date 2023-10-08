@@ -25,7 +25,7 @@ namespace Chess.Models
 
     abstract class Piece : OptionsButton
     {
-        public static List<Point> Points = new List<Point>();
+        public static HashSet<Point> Points = new HashSet<Point>();
         public int NumberOfMoves { get; private set; } = 0;
         protected List<Button> legals;
         protected Texture2D legalsTexture;
@@ -72,20 +72,26 @@ namespace Chess.Models
         }
         public bool IsVisible()
         {
-            if(board.Turn == Turn.Player2 && color == ChessColor.Black)
-            {
+            if (IsCurrentPlayerPiece())
                 return true;
-            }
-            if (board.Turn == Turn.Player1 && color == ChessColor.White)
-            {
-                return true;
-            }
             foreach(Point p in Points)
             {
                 if(p.X == Row && p.Y == Col)
                 {
                     return true;
                 }
+            }
+            return false;
+        }
+        public bool IsCurrentPlayerPiece()
+        {
+            if (board.Turn == Turn.Player2 && color == ChessColor.Black)
+            {
+                return true;
+            }
+            if (board.Turn == Turn.Player1 && color == ChessColor.White)
+            {
+                return true;
             }
             return false;
         }
