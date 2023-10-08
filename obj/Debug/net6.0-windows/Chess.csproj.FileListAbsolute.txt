@@ -39,3 +39,4 @@ C:\Users\vorte\Desktop\FOW-Chess\obj\Debug\net6.0-windows\ref\Chess.dll
 C:\Users\vorte\Desktop\FOW-Chess\bin\Debug\net6.0-windows\Content\Sprites\ChessPieces.xnb
 C:\Users\vorte\Desktop\FOW-Chess\bin\Debug\net6.0-windows\Content\Sprites\Circle.xnb
 C:\Users\vorte\Desktop\FOW-Chess\bin\Debug\net6.0-windows\Content\Sprites\WhiteEmpty.xnb
+C:\Users\vorte\Desktop\FOW-Chess\bin\Debug\net6.0-windows\Content\Sprites\Question.xnb

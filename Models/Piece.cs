@@ -25,7 +25,7 @@ namespace Chess.Models
 
     abstract class Piece : OptionsButton
     {
-        public static HashSet<Point> Points = new HashSet<Point>();
+        public static HashSet<Point> VisiblePoints = new HashSet<Point>();
         public int NumberOfMoves { get; private set; } = 0;
         protected List<Button> legals;
         protected Texture2D legalsTexture;
@@ -72,9 +72,9 @@ namespace Chess.Models
         }
         public bool IsVisible()
         {
-            if (IsCurrentPlayerPiece())
+            if (IsNextPlayersPiece())
                 return true;
-            foreach(Point p in Points)
+            foreach(Point p in VisiblePoints)
             {
                 if(p.X == Row && p.Y == Col)
                 {
@@ -83,7 +83,7 @@ namespace Chess.Models
             }
             return false;
         }
-        public bool IsCurrentPlayerPiece()
+        public bool IsNextPlayersPiece()
         {
             if (board.Turn == Turn.Player2 && color == ChessColor.Black)
             {
@@ -110,7 +110,6 @@ namespace Chess.Models
             b.Hover += (s, e) => { b.Color = Color.Black; };
             b.UnHover += (s, e) => { b.Color = Color.DarkSlateGray; };
             legals.Add(b);
-            Points.Add(new Point(row, col));
         }
 
         public abstract void CalculateLegalMoves();

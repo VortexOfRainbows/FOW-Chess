@@ -7,6 +7,7 @@ using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection.Metadata;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
@@ -49,6 +50,8 @@ namespace Chess.Models
             }
 
             InitializePieces();
+            EndOfTurnCalculations(); 
+            ReverseTurnEndLogic = false;
         }
 
         private void InitializePieces()
@@ -135,14 +138,6 @@ namespace Chess.Models
                     else whites.Add(board[i, j]);
                 }
             }
-
-            for (int i = 0; i < 8; i++)
-            {
-                for (int j = 0; j < 8; j++)
-                {
-                    if (board[i, j] != null) board[i, j].CalculateLegalMoves();
-                }
-            }
         }
 
         bool moveMade = false;
@@ -176,6 +171,15 @@ namespace Chess.Models
                 for (int j = 0; j < 8; j++)
                 {
                     grid[i, j].Draw(spriteBatch); //THIS DRAWS THE SQUARES
+                    Texture2D question = ContentService.Instance.Textures["Question"];
+                    Vector2 origin = new Vector2(question.Width / 2, question.Height / 2);
+                    Color color = Color.White;
+                    if ((i + j) % 2 == 0)
+                        color = Color.Black;
+                    if(!Piece.VisiblePoints.Contains(new Point(i, j)))
+                    {
+                        spriteBatch.Draw(question, grid[i, j].Location + new Vector2(grid[i, j].Width, grid[i, j].Height) * 0.5f, null, color, 0f, origin, 0.5f, SpriteEffects.None, 0f);
+                    }
                 }
             }
             whites.Draw(spriteBatch); //THIS DRAWS THE PIECES
@@ -214,6 +218,8 @@ namespace Chess.Models
                 board[p.Row, p.Col] = p;
                 board[tR, tC] = temp;
             }
+            if ((!ReverseTurnEndLogic && !p.IsNextPlayersPiece()) || (ReverseTurnEndLogic && p.IsNextPlayersPiece()))
+                Piece.VisiblePoints.Add(new Point(tR, tC));
             return ret;
         }
 
@@ -281,7 +287,14 @@ namespace Chess.Models
                     piece.UnMarkAnimation = new ButtonAnimation(null, new Rectangle(board[row, col].Bounds.Location, new Point(Constants.PIESESIZE, Constants.PIESESIZE)), null, true);
                 }
             }
-            Piece.Points = new HashSet<Point>();
+            EndOfTurnCalculations();
+            moveMade = true;
+
+        }
+        public bool ReverseTurnEndLogic = true;
+        public void EndOfTurnCalculations()
+        {
+            Piece.VisiblePoints = new HashSet<Point>();
             for (int i = 0; i < 8; i++)
             {
                 for (int j = 0; j < 8; j++)
@@ -289,16 +302,16 @@ namespace Chess.Models
                     if (board[i, j] != null)
                     {
                         board[i, j].CalculateLegalMoves();
-                        if (!board[i, j].IsCurrentPlayerPiece())
+                        if ((!ReverseTurnEndLogic && !board[i, j].IsNextPlayersPiece()) || (ReverseTurnEndLogic && board[i, j].IsNextPlayersPiece()))
                         {
                             for (int i2 = -1; i2 <= 1; i2++)
                             {
                                 for (int j2 = -1; j2 <= 1; j2++)
                                 {
                                     Point p2 = new Point(i + i2, j + j2);
-                                    if (!Piece.Points.Contains(p2) && p2.X >= 0 && p2.X < 8 && p2.Y >= 0 && p2.Y < 8)
+                                    if (!Piece.VisiblePoints.Contains(p2) && InGrid(p2.X, p2.Y))
                                     {
-                                        Piece.Points.Add(p2);
+                                        Piece.VisiblePoints.Add(p2);
                                     }
                                 }
                             }
@@ -306,10 +319,7 @@ namespace Chess.Models
                     }
                 }
             }
-            moveMade = true;
-
         }
-
         public bool InGrid(int r, int c)
         {
             return r >= 0 && r < 8 && c >= 0 && c < 8;
