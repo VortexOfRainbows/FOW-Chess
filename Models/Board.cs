@@ -229,6 +229,13 @@ namespace Chess.Models
                         Vector2 drawCenter = grid[i, j].Location + new Vector2(grid[i, j].Width, grid[i, j].Height) * 0.5f;
                         spriteBatch.Draw(circle, drawCenter, null, Color.Red * 0.9f, 0f, origin, 0.5f, SpriteEffects.None, 0f);
                     }
+                    else if (Piece.VisiblePointsThatLeadToCheck.Contains(new Point(i, j)) && Turn != Turn.Player1End && Turn != Turn.Player2End)
+                    {
+                        Texture2D circle = ContentService.Instance.Textures["Danger"];
+                        Vector2 origin = new Vector2(circle.Width / 2, circle.Height / 2);
+                        Vector2 drawCenter = grid[i, j].Location + new Vector2(grid[i, j].Width, grid[i, j].Height) * 0.5f;
+                        spriteBatch.Draw(circle, drawCenter, null, Color.Red * 0.9f, 0f, origin, 0.5f, SpriteEffects.None, 0f);
+                    }
                 }
             }
             for (int i = 0; i < 8; i++)

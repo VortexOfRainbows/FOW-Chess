@@ -27,6 +27,7 @@ namespace Chess.Models
     {
         public static HashSet<Point> VisiblePoints = new HashSet<Point>();
         public static HashSet<Point> PointsThatLeadToCheck = new HashSet<Point>();
+        public static HashSet<Point> VisiblePointsThatLeadToCheck = new HashSet<Point>();
         public int NumberOfMoves { get; private set; } = 0;
         protected List<Button> legals;
         protected Texture2D legalsTexture;
@@ -118,8 +119,22 @@ namespace Chess.Models
         public abstract bool SetsCheck();
         public void AddToCheckList(HashSet<Point> set)
         {
-            if (IsVisible() || !IsUpdatingCheckDisplay)
+            if(!IsUpdatingCheckDisplay)
+            {
                 return;
+            }
+            if (IsVisible())
+            {
+                if(!IsNextPlayersPiece())
+                {
+                    foreach (Point p in set)
+                    {
+                        if (!VisiblePointsThatLeadToCheck.Contains(p))
+                            VisiblePointsThatLeadToCheck.Add(p);
+                    }
+                }
+                return;
+            }
             foreach(Point p in set)
             {
                 if (!PointsThatLeadToCheck.Contains(p))
@@ -128,6 +143,7 @@ namespace Chess.Models
         }
         public static void ResetCheckList()
         {
+            VisiblePointsThatLeadToCheck = new HashSet<Point>();
             PointsThatLeadToCheck = new HashSet<Point>();
         }
         public void DrawLegalMoves(SpriteBatch spriteBatch)
