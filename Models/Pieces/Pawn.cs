@@ -132,23 +132,33 @@ namespace Chess.Models.Pieces
         {
             if (Col != 0)
             {
+                HashSet<Point> checkPoints = new HashSet<Point>();
                 if (ChessColor == ChessColor.White && !board.IsEmpty(Row - 1, Col - 1) && board.GetPiece(Row - 1, Col - 1).ChessColor != ChessColor && board.GetPiece(Row - 1, Col - 1).ChessPiece == ChessPiece.King)
                 {
+                    checkPoints.Add(new Point(Row - 1, Col - 1));
+                    AddToCheckList(checkPoints);
                     return true;
                 }
                 else if (ChessColor == ChessColor.Black && !board.IsEmpty(Row + 1, Col - 1) && board.GetPiece(Row + 1, Col - 1).ChessColor != ChessColor && board.GetPiece(Row + 1, Col - 1).ChessPiece == ChessPiece.King)
                 {
+                    checkPoints.Add(new Point(Row + 1, Col - 1));
+                    AddToCheckList(checkPoints);
                     return true;
                 }
             }
             if (Col != 7)
             {
+                HashSet<Point> checkPoints = new HashSet<Point>();
                 if (ChessColor == ChessColor.White && !board.IsEmpty(Row - 1, Col + 1) && board.GetPiece(Row - 1, Col + 1).ChessColor != ChessColor && board.GetPiece(Row - 1, Col + 1).ChessPiece == ChessPiece.King)
                 {
+                    checkPoints.Add(new Point(Row - 1, Col + 1));
+                    AddToCheckList(checkPoints);
                     return true;
                 }
                 else if (ChessColor == ChessColor.Black && !board.IsEmpty(Row + 1, Col + 1) && board.GetPiece(Row + 1, Col + 1).ChessColor != ChessColor && board.GetPiece(Row + 1, Col + 1).ChessPiece == ChessPiece.King)
                 {
+                    checkPoints.Add(new Point(Row + 1, Col + 1));
+                    AddToCheckList(checkPoints);
                     return true;
                 }
             }

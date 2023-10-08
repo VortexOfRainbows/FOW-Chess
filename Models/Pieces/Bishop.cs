@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Chess.Screens;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using SharpDX.Direct2D1.Effects;
 
 namespace Chess.Models.Pieces
 {
@@ -57,32 +58,56 @@ namespace Chess.Models.Pieces
 
         public override bool SetsCheck()
         {
+            HashSet<Point> checkPoints = new HashSet<Point>();
             for (int i = 1; i <= Math.Min(Row, Col); i++)
             {
+                checkPoints.Add(new Point(Row - i, Col - i));
                 if (board.IsEmpty(Row - i, Col - i)) continue;
-                Piece p = board.GetPiece(Row - i, Col - i);
-                if (p.ChessColor != ChessColor && p.ChessPiece == ChessPiece.King) return true;
+                Piece p = board.GetPiece(Row - i, Col - i); 
+                if (p.ChessColor != ChessColor && p.ChessPiece == ChessPiece.King)
+                {
+                    AddToCheckList(checkPoints);
+                    return true;
+                }
                 break;
             }
+            checkPoints = new HashSet<Point>();
             for (int i = 1; i <= 7 - Math.Max(Row, Col); i++)
             {
+                checkPoints.Add(new Point(Row + i, Col + i));
                 if (board.IsEmpty(Row + i, Col + i)) continue;
                 Piece p = board.GetPiece(Row + i, Col + i);
-                if (p.ChessColor != ChessColor && p.ChessPiece == ChessPiece.King) return true;
+                if (p.ChessColor != ChessColor && p.ChessPiece == ChessPiece.King)
+                {
+                    AddToCheckList(checkPoints);
+                    return true;
+                }
                 break;
             }
+            checkPoints = new HashSet<Point>();
             for (int i = 1; i <= Math.Min(Row, 7 - Col); i++)
             {
+                checkPoints.Add(new Point(Row - i, Col + i));
                 if (board.IsEmpty(Row - i, Col + i)) continue;
                 Piece p = board.GetPiece(Row - i, Col + i);
-                if (p.ChessColor != ChessColor && p.ChessPiece == ChessPiece.King) return true;
+                if (p.ChessColor != ChessColor && p.ChessPiece == ChessPiece.King)
+                {
+                    AddToCheckList(checkPoints);
+                    return true;
+                }
                 break;
             }
+            checkPoints = new HashSet<Point>();
             for (int i = 1; i <= Math.Min(7 - Row, Col); i++)
             {
+                checkPoints.Add(new Point(Row + i, Col - i));
                 if (board.IsEmpty(Row + i, Col - i)) continue;
                 Piece p = board.GetPiece(Row + i, Col - i);
-                if (p.ChessColor != ChessColor && p.ChessPiece == ChessPiece.King) return true;
+                if (p.ChessColor != ChessColor && p.ChessPiece == ChessPiece.King)
+                {
+                    AddToCheckList(checkPoints);
+                    return true;
+                }
                 break;
             }
             return false;

@@ -13,8 +13,9 @@ namespace Chess
     // normal and special moves in chess aswell as restricts pieces from doing illegal moves.
     public class DriverClass : Game
     {
-        GraphicsDeviceManager graphics;
-        SpriteBatch spriteBatch;
+        public static DriverClass instance;
+        public GraphicsDeviceManager graphics;
+        public SpriteBatch spriteBatch;
 
         public static Random Random = new Random(); //Static since new seed is generated with current time
 
@@ -34,6 +35,7 @@ namespace Chess
 
             Window.Title = "Chess";
             IsMouseVisible = true;
+            instance = this;
         }
 
         protected override void Initialize()

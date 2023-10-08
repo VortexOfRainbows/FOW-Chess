@@ -6,10 +6,22 @@
   <SourceFiles>
     <File>C:/Users/vorte/Desktop/FOW-Chess/Content/Sprites/ChessPieces.png</File>
     <File>C:/Users/vorte/Desktop/FOW-Chess/Content/Sprites/Circle.png</File>
+    <File>C:/Users/vorte/Desktop/FOW-Chess/Content/Sprites/Cloud.png</File>
+    <File>C:/Users/vorte/Desktop/FOW-Chess/Content/Sprites/FilledCircle.png</File>
+    <File>C:/Users/vorte/Desktop/FOW-Chess/Content/Sprites/Numbers.png</File>
+    <File>C:/Users/vorte/Desktop/FOW-Chess/Content/Sprites/Pinned.png</File>
     <File>C:/Users/vorte/Desktop/FOW-Chess/Content/Sprites/Question.png</File>
+    <File>C:/Users/vorte/Desktop/FOW-Chess/Content/Sprites/Ready.png</File>
+    <File>C:/Users/vorte/Desktop/FOW-Chess/Content/Sprites/SpaceBar.png</File>
     <File>C:/Users/vorte/Desktop/FOW-Chess/Content/Sprites/WhiteEmpty.png</File>
   </SourceFiles>
   <DestFiles>
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
     <File xsi:nil="true" />
     <File xsi:nil="true" />
     <File xsi:nil="true" />

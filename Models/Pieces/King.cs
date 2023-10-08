@@ -65,6 +65,11 @@ namespace Chess.Models.Pieces
                     Piece p = board.GetPiece(i, j);
                     if(p.ChessColor != ChessColor && p.ChessPiece == ChessPiece.King)
                     {
+                        HashSet<Point> checkPoints = new HashSet<Point>
+                        {
+                            new Point(i, j)
+                        };
+                        AddToCheckList(checkPoints);
                         return true;
                     }
                 }

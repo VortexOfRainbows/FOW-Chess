@@ -26,6 +26,7 @@ namespace Chess.Models
     abstract class Piece : OptionsButton
     {
         public static HashSet<Point> VisiblePoints = new HashSet<Point>();
+        public static HashSet<Point> PointsThatLeadToCheck = new HashSet<Point>();
         public int NumberOfMoves { get; private set; } = 0;
         protected List<Button> legals;
         protected Texture2D legalsTexture;
@@ -113,9 +114,22 @@ namespace Chess.Models
         }
 
         public abstract void CalculateLegalMoves();
-
+        public static bool IsUpdatingCheckDisplay = false;
         public abstract bool SetsCheck();
-
+        public void AddToCheckList(HashSet<Point> set)
+        {
+            if (IsVisible() || !IsUpdatingCheckDisplay)
+                return;
+            foreach(Point p in set)
+            {
+                if (!PointsThatLeadToCheck.Contains(p))
+                    PointsThatLeadToCheck.Add(p);
+            }
+        }
+        public static void ResetCheckList()
+        {
+            PointsThatLeadToCheck = new HashSet<Point>();
+        }
         public void DrawLegalMoves(SpriteBatch spriteBatch)
         {
             for (int i = 0; i < legals.Count; i++)

@@ -52,7 +52,13 @@ namespace Chess.Managers
 
             AddTexture("Sprites/WhiteEmpty", "Empty");
             AddTexture("Sprites/Circle", "Circle");
+            AddTexture("Sprites/Pinned", "Pinned");
+            AddTexture("Sprites/FilledCircle", "FilledCircle");
             AddTexture("Sprites/Question", "Question");
+            AddTexture("Sprites/Cloud", "Cloud");
+            AddTexture("Sprites/Numbers", "Numbers");
+            AddTexture("Sprites/SpaceBar", "Spacebar");
+            AddTexture("Sprites/Ready", "Ready");
 
             Texture2D texture = _content.Load<Texture2D>("Sprites/ChessPieces");
 

@@ -57,42 +57,54 @@ namespace Chess.Models.Pieces
 
         public override bool SetsCheck()
         {
+            HashSet<Point> checkPoints = new HashSet<Point>();
             for (int i = Row - 1; i >= 0; i--)
             {
+                checkPoints.Add(new Point(i, Col));
                 if (board.IsEmpty(i, Col)) continue;
                 Piece p = board.GetPiece(i, Col);
                 if (p.ChessColor != ChessColor && p.ChessPiece == ChessPiece.King)
                 {
+                    AddToCheckList(checkPoints);
                     return true;
                 }
                 break;
             }
+            checkPoints = new HashSet<Point>();
             for (int i = Col - 1; i >= 0; i--)
             {
+                checkPoints.Add(new Point(Row, i));
                 if (board.IsEmpty(Row, i)) continue;
                 Piece p = board.GetPiece(Row, i);
                 if (p.ChessColor != ChessColor && p.ChessPiece == ChessPiece.King)
                 {
+                    AddToCheckList(checkPoints);
                     return true;
                 }
                 break;
             }
+            checkPoints = new HashSet<Point>();
             for (int i = Row + 1; i < 8; i++)
             {
+                checkPoints.Add(new Point(i, Col));
                 if (board.IsEmpty(i, Col)) continue;
                 Piece p = board.GetPiece(i, Col);
                 if (p.ChessColor != ChessColor && p.ChessPiece == ChessPiece.King)
                 {
+                    AddToCheckList(checkPoints);
                     return true;
                 }
                 break;
             }
+            checkPoints = new HashSet<Point>();
             for (int i = Col + 1; i < 8; i++)
             {
+                checkPoints.Add(new Point(Row, i));
                 if (board.IsEmpty(Row, i)) continue;
                 Piece p = board.GetPiece(Row, i);
                 if (p.ChessColor != ChessColor && p.ChessPiece == ChessPiece.King)
                 {
+                    AddToCheckList(checkPoints);
                     return true;
                 }
                 break;

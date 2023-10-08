@@ -2,10 +2,15 @@
 using Chess.IO;
 using Chess.Managers;
 using Chess.Models.Pieces;
+using Microsoft.VisualBasic.Devices;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
+using SharpDX.Direct3D9;
 using System;
 using System.Collections.Generic;
+using System.Data.SqlTypes;
+using System.Diagnostics;
 using System.Linq;
 using System.Reflection.Metadata;
 using System.Runtime.CompilerServices;
@@ -17,7 +22,9 @@ namespace Chess.Models
     enum Turn
     {
         Player1,
-        Player2
+        Player2,
+        Player1End,
+        Player2End
     }
     enum ChessColor
     {
@@ -30,7 +37,7 @@ namespace Chess.Models
         MarkableButtonPanel blacks;
 
         Sprite2D[,] grid;
-
+        CloudGroup[,] clouds;
         Piece[,] board;
         public Turn Turn { get; private set; } = Turn.Player1;
 
@@ -40,17 +47,18 @@ namespace Chess.Models
         {
             Texture2D gridSquares = ContentService.Instance.Textures["Empty"];
             grid = new Sprite2D[8, 8];
+            clouds = new CloudGroup[8, 8];
             for (int i = 0; i < 8; i++)
             {
                 for (int j = 0; j < 8; j++)
                 {
                     grid[i, j] = new Sprite2D(gridSquares, new Rectangle(j * Constants.TILESIZE, i * Constants.TILESIZE, Constants.TILESIZE, Constants.TILESIZE), Color.DarkGray);
                     if ((i + j) % 2 == 0) grid[i, j].Color = Color.White;
+                    clouds[i, j] = new CloudGroup(new Point(i, j));
                 }
             }
-
             InitializePieces();
-            EndOfTurnCalculations(); 
+            EndOfTurnCalculations(true); 
             ReverseTurnEndLogic = false;
         }
 
@@ -139,7 +147,7 @@ namespace Chess.Models
                 }
             }
         }
-
+        int EndTurnCounter = -1;
         bool moveMade = false;
         internal void Update(GameTime gameTime, Input curInput, Input prevInput)
         {
@@ -154,13 +162,56 @@ namespace Chess.Models
                     whites.Update(curInput, prevInput);
                     break;
             }
+            foreach(CloudGroup cloud in clouds)
+            {
+                cloud.Update();
+            }
             if (moveMade)
+            {
+                ReverseTurnEndLogic = true;
+                UpdateVisibility();
+                ReverseTurnEndLogic = false;
+                EndTurnCounter = 60 * 10;
+                moveMade = false;
+            }
+            if (EndTurnCounter > 0)
             {
                 whites.UnmarkAll();
                 blacks.UnmarkAll();
-                if (Turn == Turn.Player1) Turn = Turn.Player2;
-                else Turn = Turn.Player1;
-                moveMade = false;
+                EndTurnCounter--;
+            }
+            bool nextTurn = false;
+            if (EndTurnCounter == 0)
+            {
+                whites.UnmarkAll();
+                blacks.UnmarkAll();
+                Piece.VisiblePoints = new HashSet<Point>();
+                if (Turn == Turn.Player2)
+                    Turn = Turn.Player2End;
+                else if(Turn == Turn.Player1)
+                    Turn = Turn.Player1End;
+                if(!prevInput.Keyboard.IsKeyDown(Keys.Space) && curInput.Keyboard.IsKeyDown(Keys.Space))
+                {
+                    nextTurn = true;
+                }
+            }
+            else if(EndTurnCounter > 0)
+            {
+                if (!prevInput.Keyboard.IsKeyDown(Keys.Space) && curInput.Keyboard.IsKeyDown(Keys.Space))
+                {
+                    EndTurnCounter = 0;
+                }
+            }
+            if(nextTurn)
+            {
+                if (Turn == Turn.Player1End)
+                    Turn = Turn.Player2;
+                else if (Turn == Turn.Player2End)
+                    Turn = Turn.Player1;
+                ReverseTurnEndLogic = true;
+                UpdateVisibility();
+                ReverseTurnEndLogic = false;
+                EndTurnCounter = -1;
             }
         }
 
@@ -171,21 +222,73 @@ namespace Chess.Models
                 for (int j = 0; j < 8; j++)
                 {
                     grid[i, j].Draw(spriteBatch); //THIS DRAWS THE SQUARES
-                    Texture2D question = ContentService.Instance.Textures["Question"];
-                    Vector2 origin = new Vector2(question.Width / 2, question.Height / 2);
-                    Color color = Color.White;
-                    if ((i + j) % 2 == 0)
-                        color = Color.Black;
-                    if(!Piece.VisiblePoints.Contains(new Point(i, j)))
+                    if(Piece.PointsThatLeadToCheck.Contains(new Point(i, j)) && Turn != Turn.Player1End && Turn != Turn.Player2End)
                     {
-                        spriteBatch.Draw(question, grid[i, j].Location + new Vector2(grid[i, j].Width, grid[i, j].Height) * 0.5f, null, color, 0f, origin, 0.5f, SpriteEffects.None, 0f);
+                        Texture2D circle = ContentService.Instance.Textures["Pinned"];
+                        Vector2 origin = new Vector2(circle.Width / 2, circle.Height / 2);
+                        Vector2 drawCenter = grid[i, j].Location + new Vector2(grid[i, j].Width, grid[i, j].Height) * 0.5f;
+                        spriteBatch.Draw(circle, drawCenter, null, Color.Red * 0.9f, 0f, origin, 0.5f, SpriteEffects.None, 0f);
                     }
+                }
+            }
+            for (int i = 0; i < 8; i++)
+            {
+                for (int j = 0; j < 8; j++)
+                {
+                    Vector2 drawCenter = grid[i, j].Location + new Vector2(grid[i, j].Width, grid[i, j].Height) * 0.5f;
+                    clouds[i, j].Draw(drawCenter, spriteBatch);
+                }
+            }
+            for (int i = 0; i < 8; i++)
+            {
+                for (int j = 0; j < 8; j++)
+                {
+                    Vector2 drawCenter = grid[i, j].Location + new Vector2(grid[i, j].Width, grid[i, j].Height) * 0.5f;
+                    clouds[i, j].Draw(drawCenter, spriteBatch, true);
                 }
             }
             whites.Draw(spriteBatch); //THIS DRAWS THE PIECES
             blacks.Draw(spriteBatch);
+            Vector2 bottomLeft = new Vector2(Constants.TILESIZE * 1, Constants.TILESIZE * 7);
+            if (EndTurnCounter > 0)
+            {
+                DrawNumber(bottomLeft, spriteBatch, EndTurnCounter / 60);
+            }
+            else if(EndTurnCounter == 0)
+            {
+                bottomLeft.X += 60;
+                bottomLeft.Y -= 40;
+                int frameNum = 0;
+                if(Turn.Player2End == Turn)
+                {
+                    frameNum = 1;
+                }
+                Texture2D spaceBar = ContentService.Instance.Textures["Ready"];
+                Vector2 origin = new Vector2(spaceBar.Width / 2, spaceBar.Height / 4);
+                Rectangle frame = new Rectangle(0, 200 * frameNum, 200, 200);
+                for (int i = 0; i < 20; i++)
+                {
+                    Vector2 circular = new Vector2(7, 0).RotatedBy(MathHelper.ToRadians(i * 18));
+                    spriteBatch.Draw(spaceBar, bottomLeft + circular, frame, Color.Black, 0f, origin, 1f, SpriteEffects.None, 0f);
+                }
+                spriteBatch.Draw(spaceBar, bottomLeft, frame, Color.WhiteSmoke, 0f, origin, 1f, SpriteEffects.None, 0f);
+            }
         }
-
+        public void DrawNumber(Vector2 pos, SpriteBatch spriteBatch, int num)
+        {
+            Texture2D numbers = ContentService.Instance.Textures["Numbers"];
+            Texture2D spaceBar = ContentService.Instance.Textures["Spacebar"];
+            Vector2 origin = new Vector2(numbers.Width / 2, numbers.Height / 20);
+            Rectangle frame = new Rectangle(0, 200 * num, 200, 200);
+            for(int i = 0; i < 20; i++)
+            {
+                Vector2 circular = new Vector2(7, 0).RotatedBy(MathHelper.ToRadians(i * 18));
+                spriteBatch.Draw(numbers, pos + circular, frame, Color.Black, 0f, origin, 0.5f, SpriteEffects.None, 0f);
+                spriteBatch.Draw(spaceBar, pos + new Vector2(120, 0) + circular, null, Color.Black, 0f, origin, 1f, SpriteEffects.None, 0f);
+            }
+            spriteBatch.Draw(numbers, pos, frame, Color.WhiteSmoke, 0f, origin, 0.5f, SpriteEffects.None, 0f);
+            spriteBatch.Draw(spaceBar, pos + new Vector2(120, 0), null, Color.WhiteSmoke, 0f, origin, 1f, SpriteEffects.None, 0f);
+        }
         public bool IsEmpty(int r, int c)
         {
             return board[r,c] == null;
@@ -218,8 +321,11 @@ namespace Chess.Models
                 board[p.Row, p.Col] = p;
                 board[tR, tC] = temp;
             }
-            if ((!ReverseTurnEndLogic && !p.IsNextPlayersPiece()) || (ReverseTurnEndLogic && p.IsNextPlayersPiece()))
-                Piece.VisiblePoints.Add(new Point(tR, tC));
+            if(UpdateVisibilityThisCycle)
+            {
+                if ((!ReverseTurnEndLogic && !p.IsNextPlayersPiece()) || (ReverseTurnEndLogic && p.IsNextPlayersPiece()))
+                    Piece.VisiblePoints.Add(new Point(tR, tC));
+            }
             return ret;
         }
 
@@ -287,14 +393,50 @@ namespace Chess.Models
                     piece.UnMarkAnimation = new ButtonAnimation(null, new Rectangle(board[row, col].Bounds.Location, new Point(Constants.PIESESIZE, Constants.PIESESIZE)), null, true);
                 }
             }
-            EndOfTurnCalculations();
+            EndOfTurnCalculations(false);
             moveMade = true;
 
         }
         public bool ReverseTurnEndLogic = true;
-        public void EndOfTurnCalculations()
+        public bool UpdateVisibilityThisCycle = false;
+        public void EndOfTurnCalculations(bool updateVis)
+        {
+            for (int i = 0; i < 8; i++)
+            {
+                for (int j = 0; j < 8; j++)
+                {
+                    if (board[i, j] != null)
+                    {
+                        board[i, j].CalculateLegalMoves();
+                    }
+                }
+            }
+            if(updateVis)
+            {
+                UpdateVisibility();
+            }
+        }
+        public void UpdateCheckList()
+        {
+            Piece.ResetCheckList();
+            Piece.IsUpdatingCheckDisplay = true;
+            for (int i = 0; i < 8; i++)
+            {
+                for (int j = 0; j < 8; j++)
+                {
+                    if (board[i, j] != null)
+                    {
+                        board[i, j].CalculateLegalMoves();
+                        board[i, j].SetsCheck();
+                    }
+                }
+            }
+            Piece.IsUpdatingCheckDisplay = false;
+        }
+        public void UpdateVisibility()
         {
             Piece.VisiblePoints = new HashSet<Point>();
+            UpdateVisibilityThisCycle = true;
             for (int i = 0; i < 8; i++)
             {
                 for (int j = 0; j < 8; j++)
@@ -319,6 +461,8 @@ namespace Chess.Models
                     }
                 }
             }
+            UpdateVisibilityThisCycle = false;
+            UpdateCheckList();
         }
         public bool InGrid(int r, int c)
         {

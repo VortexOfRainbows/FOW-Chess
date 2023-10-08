@@ -40,3 +40,9 @@ C:\Users\vorte\Desktop\FOW-Chess\bin\Debug\net6.0-windows\Content\Sprites\ChessP
 C:\Users\vorte\Desktop\FOW-Chess\bin\Debug\net6.0-windows\Content\Sprites\Circle.xnb
 C:\Users\vorte\Desktop\FOW-Chess\bin\Debug\net6.0-windows\Content\Sprites\WhiteEmpty.xnb
 C:\Users\vorte\Desktop\FOW-Chess\bin\Debug\net6.0-windows\Content\Sprites\Question.xnb
+C:\Users\vorte\Desktop\FOW-Chess\bin\Debug\net6.0-windows\Content\Sprites\Cloud.xnb
+C:\Users\vorte\Desktop\FOW-Chess\bin\Debug\net6.0-windows\Content\Sprites\Numbers.xnb
+C:\Users\vorte\Desktop\FOW-Chess\bin\Debug\net6.0-windows\Content\Sprites\SpaceBar.xnb
+C:\Users\vorte\Desktop\FOW-Chess\bin\Debug\net6.0-windows\Content\Sprites\Ready.xnb
+C:\Users\vorte\Desktop\FOW-Chess\bin\Debug\net6.0-windows\Content\Sprites\FilledCircle.xnb
+C:\Users\vorte\Desktop\FOW-Chess\bin\Debug\net6.0-windows\Content\Sprites\Pinned.xnb

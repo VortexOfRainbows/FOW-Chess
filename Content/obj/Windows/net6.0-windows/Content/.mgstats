@@ -1,5 +1,11 @@
 Source File,Dest File,Processor Type,Content Type,Source File Size,Dest File Size,Build Seconds
 "C:/Users/vorte/Desktop/FOW-Chess/Content/Sprites/ChessPieces.png","C:/Users/vorte/Desktop/FOW-Chess/Content/bin/Windows/Content/Sprites/ChessPieces.xnb","TextureProcessor","Texture2DContent",47275,1456085,0.1228758
 "C:/Users/vorte/Desktop/FOW-Chess/Content/Sprites/Circle.png","C:/Users/vorte/Desktop/FOW-Chess/Content/bin/Windows/Content/Sprites/Circle.xnb","TextureProcessor","Texture2DContent",3898,160085,0.019597
+"C:/Users/vorte/Desktop/FOW-Chess/Content/Sprites/Cloud.png","C:/Users/vorte/Desktop/FOW-Chess/Content/bin/Windows/Content/Sprites/Cloud.xnb","TextureProcessor","Texture2DContent",2091,160085,0.095924
+"C:/Users/vorte/Desktop/FOW-Chess/Content/Sprites/FilledCircle.png","C:/Users/vorte/Desktop/FOW-Chess/Content/bin/Windows/Content/Sprites/FilledCircle.xnb","TextureProcessor","Texture2DContent",4458,160085,0.0829592
+"C:/Users/vorte/Desktop/FOW-Chess/Content/Sprites/Numbers.png","C:/Users/vorte/Desktop/FOW-Chess/Content/bin/Windows/Content/Sprites/Numbers.xnb","TextureProcessor","Texture2DContent",21471,1600085,0.1233284
+"C:/Users/vorte/Desktop/FOW-Chess/Content/Sprites/Pinned.png","C:/Users/vorte/Desktop/FOW-Chess/Content/bin/Windows/Content/Sprites/Pinned.xnb","TextureProcessor","Texture2DContent",4065,160085,0.0813464
 "C:/Users/vorte/Desktop/FOW-Chess/Content/Sprites/Question.png","C:/Users/vorte/Desktop/FOW-Chess/Content/bin/Windows/Content/Sprites/Question.xnb","TextureProcessor","Texture2DContent",2202,160085,0.102271
+"C:/Users/vorte/Desktop/FOW-Chess/Content/Sprites/Ready.png","C:/Users/vorte/Desktop/FOW-Chess/Content/bin/Windows/Content/Sprites/Ready.xnb","TextureProcessor","Texture2DContent",8694,320085,0.0930402
+"C:/Users/vorte/Desktop/FOW-Chess/Content/Sprites/SpaceBar.png","C:/Users/vorte/Desktop/FOW-Chess/Content/bin/Windows/Content/Sprites/SpaceBar.xnb","TextureProcessor","Texture2DContent",2346,160085,0.0829128
 "C:/Users/vorte/Desktop/FOW-Chess/Content/Sprites/WhiteEmpty.png","C:/Users/vorte/Desktop/FOW-Chess/Content/bin/Windows/Content/Sprites/WhiteEmpty.xnb","TextureProcessor","Texture2DContent",2793,1440085,0.021689
