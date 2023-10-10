@@ -28,6 +28,8 @@ namespace Chess.Models
         public static HashSet<Point> VisiblePoints = new HashSet<Point>();
         public static HashSet<Point> PointsThatLeadToCheck = new HashSet<Point>();
         public static HashSet<Point> VisiblePointsThatLeadToCheck = new HashSet<Point>();
+        public static HashSet<Point> FuturePointsThatLeadToCheck = new HashSet<Point>();
+        public static HashSet<Point> FutureVisiblePointsThatLeadToCheck = new HashSet<Point>();
         public int NumberOfMoves { get; private set; } = 0;
         protected List<Button> legals;
         protected Texture2D legalsTexture;
@@ -113,7 +115,7 @@ namespace Chess.Models
             b.UnHover += (s, e) => { b.Color = Color.DarkSlateGray; };
             legals.Add(b);
         }
-
+        public static bool CheckIsForFutureMoves = false;
         public abstract void CalculateLegalMoves();
         public static bool IsUpdatingCheckDisplay = false;
         public abstract bool SetsCheck();
@@ -129,20 +131,38 @@ namespace Chess.Models
                 {
                     foreach (Point p in set)
                     {
-                        if (!VisiblePointsThatLeadToCheck.Contains(p))
-                            VisiblePointsThatLeadToCheck.Add(p);
+                        if (CheckIsForFutureMoves)
+                        {
+                            if (!FutureVisiblePointsThatLeadToCheck.Contains(p))
+                                FutureVisiblePointsThatLeadToCheck.Add(p);
+                        }
+                        else
+                        {
+                            if (!VisiblePointsThatLeadToCheck.Contains(p))
+                                VisiblePointsThatLeadToCheck.Add(p);
+                        }
                     }
                 }
                 return;
             }
             foreach(Point p in set)
             {
-                if (!PointsThatLeadToCheck.Contains(p))
-                    PointsThatLeadToCheck.Add(p);
+                if (CheckIsForFutureMoves)
+                {
+                    if (!FuturePointsThatLeadToCheck.Contains(p))
+                        FuturePointsThatLeadToCheck.Add(p);
+                }
+                else
+                {
+                    if (!PointsThatLeadToCheck.Contains(p))
+                        PointsThatLeadToCheck.Add(p);
+                }
             }
         }
         public static void ResetCheckList()
         {
+            FutureVisiblePointsThatLeadToCheck = new HashSet<Point>();
+            FuturePointsThatLeadToCheck = new HashSet<Point>();
             VisiblePointsThatLeadToCheck = new HashSet<Point>();
             PointsThatLeadToCheck = new HashSet<Point>();
         }

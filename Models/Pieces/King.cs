@@ -79,6 +79,10 @@ namespace Chess.Models.Pieces
 
         protected void AddCastlingMove(Piece p, int col, int secol)
         {
+            if(PointsThatLeadToCheck.Contains(new Point(this.Row, this.Col)) || VisiblePointsThatLeadToCheck.Contains(new Point(this.Row, this.Col)))
+            {
+                return;
+            }
             Button b = new Button(new Sprite2D(legalsTexture, new Rectangle(col * Constants.TILESIZE, Row * Constants.TILESIZE, Constants.TILESIZE, Constants.TILESIZE), Color.DarkSlateGray));
             b.Click += (s, e) => { Move(Row, col); p.Move(Row, secol); };
             b.Hover += (s, e) => { b.Color = Color.Black; };

@@ -222,14 +222,14 @@ namespace Chess.Models
                 for (int j = 0; j < 8; j++)
                 {
                     grid[i, j].Draw(spriteBatch); //THIS DRAWS THE SQUARES
-                    if(Piece.PointsThatLeadToCheck.Contains(new Point(i, j)) && Turn != Turn.Player1End && Turn != Turn.Player2End)
+                    if((Piece.PointsThatLeadToCheck.Contains(new Point(i, j)) || Piece.FuturePointsThatLeadToCheck.Contains(new Point(i, j))) && Turn != Turn.Player1End && Turn != Turn.Player2End)
                     {
                         Texture2D circle = ContentService.Instance.Textures["Pinned"];
                         Vector2 origin = new Vector2(circle.Width / 2, circle.Height / 2);
                         Vector2 drawCenter = grid[i, j].Location + new Vector2(grid[i, j].Width, grid[i, j].Height) * 0.5f;
                         spriteBatch.Draw(circle, drawCenter, null, Color.Red * 0.9f, 0f, origin, 0.5f, SpriteEffects.None, 0f);
                     }
-                    else if (Piece.VisiblePointsThatLeadToCheck.Contains(new Point(i, j)) && Turn != Turn.Player1End && Turn != Turn.Player2End)
+                    else if ((Piece.VisiblePointsThatLeadToCheck.Contains(new Point(i, j)) || Piece.FutureVisiblePointsThatLeadToCheck.Contains(new Point(i, j))) && Turn != Turn.Player1End && Turn != Turn.Player2End)
                     {
                         Texture2D circle = ContentService.Instance.Textures["Danger"];
                         Vector2 origin = new Vector2(circle.Width / 2, circle.Height / 2);
@@ -307,6 +307,7 @@ namespace Chess.Models
         /// </summary>
         public bool IsLegalMove(Piece p, int tR, int tC)
         {
+            Piece.CheckIsForFutureMoves = true;
             bool ret = false;
             if(IsEmpty(tR, tC) || board[tR, tC].ChessColor != p.ChessColor || board[tR, tC] == p)
             {
@@ -328,7 +329,8 @@ namespace Chess.Models
                 board[p.Row, p.Col] = p;
                 board[tR, tC] = temp;
             }
-            if(UpdateVisibilityThisCycle)
+            Piece.CheckIsForFutureMoves = false;
+            if (UpdateVisibilityThisCycle)
             {
                 if ((!ReverseTurnEndLogic && !p.IsNextPlayersPiece()) || (ReverseTurnEndLogic && p.IsNextPlayersPiece()))
                     Piece.VisiblePoints.Add(new Point(tR, tC));
