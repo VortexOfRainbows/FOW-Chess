@@ -60,6 +60,8 @@ namespace Chess.Managers
             AddTexture("Sprites/Numbers", "Numbers");
             AddTexture("Sprites/SpaceBar", "Spacebar");
             AddTexture("Sprites/Ready", "Ready");
+            AddTexture("Sprites/Checkmate", "Checkmate");
+            AddTexture("Sprites/Stalemate", "Stalemate");
 
             Texture2D texture = _content.Load<Texture2D>("Sprites/ChessPieces");
 

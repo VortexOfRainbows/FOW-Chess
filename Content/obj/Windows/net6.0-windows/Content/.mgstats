@@ -1,4 +1,5 @@
 Source File,Dest File,Processor Type,Content Type,Source File Size,Dest File Size,Build Seconds
+"C:/Users/vorte/Desktop/FOW-Chess/Content/Sprites/Checkmate.png","C:/Users/vorte/Desktop/FOW-Chess/Content/bin/Windows/Content/Sprites/Checkmate.xnb","TextureProcessor","Texture2DContent",3201,160085,0.1063245
 "C:/Users/vorte/Desktop/FOW-Chess/Content/Sprites/ChessPieces.png","C:/Users/vorte/Desktop/FOW-Chess/Content/bin/Windows/Content/Sprites/ChessPieces.xnb","TextureProcessor","Texture2DContent",47275,1456085,0.1228758
 "C:/Users/vorte/Desktop/FOW-Chess/Content/Sprites/Circle.png","C:/Users/vorte/Desktop/FOW-Chess/Content/bin/Windows/Content/Sprites/Circle.xnb","TextureProcessor","Texture2DContent",3898,160085,0.019597
 "C:/Users/vorte/Desktop/FOW-Chess/Content/Sprites/Cloud.png","C:/Users/vorte/Desktop/FOW-Chess/Content/bin/Windows/Content/Sprites/Cloud.xnb","TextureProcessor","Texture2DContent",2091,160085,0.095924
@@ -9,4 +10,5 @@ Source File,Dest File,Processor Type,Content Type,Source File Size,Dest File Siz
 "C:/Users/vorte/Desktop/FOW-Chess/Content/Sprites/Question.png","C:/Users/vorte/Desktop/FOW-Chess/Content/bin/Windows/Content/Sprites/Question.xnb","TextureProcessor","Texture2DContent",2202,160085,0.102271
 "C:/Users/vorte/Desktop/FOW-Chess/Content/Sprites/Ready.png","C:/Users/vorte/Desktop/FOW-Chess/Content/bin/Windows/Content/Sprites/Ready.xnb","TextureProcessor","Texture2DContent",8694,320085,0.0930402
 "C:/Users/vorte/Desktop/FOW-Chess/Content/Sprites/SpaceBar.png","C:/Users/vorte/Desktop/FOW-Chess/Content/bin/Windows/Content/Sprites/SpaceBar.xnb","TextureProcessor","Texture2DContent",2346,160085,0.0829128
+"C:/Users/vorte/Desktop/FOW-Chess/Content/Sprites/Stalemate.png","C:/Users/vorte/Desktop/FOW-Chess/Content/bin/Windows/Content/Sprites/Stalemate.xnb","TextureProcessor","Texture2DContent",3180,160085,0.0074767
 "C:/Users/vorte/Desktop/FOW-Chess/Content/Sprites/WhiteEmpty.png","C:/Users/vorte/Desktop/FOW-Chess/Content/bin/Windows/Content/Sprites/WhiteEmpty.xnb","TextureProcessor","Texture2DContent",2793,1440085,0.021689

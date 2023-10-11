@@ -149,6 +149,8 @@ namespace Chess.Models
         }
         int EndTurnCounter = -1;
         bool moveMade = false;
+        public bool Checkmate;
+        public bool Stalemate;
         internal void Update(GameTime gameTime, Input curInput, Input prevInput)
         {
             switch (Turn)
@@ -212,6 +214,36 @@ namespace Chess.Models
                 UpdateVisibility();
                 ReverseTurnEndLogic = false;
                 EndTurnCounter = -1;
+                bool legalMoveAvailable = false;
+                bool kingIsInCheck = false;
+                for (int i = 0; i < 8; i++)
+                {
+                    for (int j = 0; j < 8; j++)
+                    {
+                        if (board[i, j] != null && board[i, j].IsNextPlayersPiece())
+                        {
+                            if (board[i, j].ChessPiece == ChessPiece.King && board[i, j] is King king && king.InCheck())
+                            {
+                                kingIsInCheck = true;
+                            }
+                            if (board[i, j].HasLegalMoves())
+                            {
+                                legalMoveAvailable = true;
+                            }
+                        }
+                    }
+                }
+                if(!legalMoveAvailable)
+                {
+                    if(kingIsInCheck)
+                    {
+                        Checkmate = true;
+                    }
+                    else
+                    {
+                        Stalemate = true;
+                    }
+                }
             }
         }
 
@@ -222,7 +254,7 @@ namespace Chess.Models
                 for (int j = 0; j < 8; j++)
                 {
                     grid[i, j].Draw(spriteBatch); //THIS DRAWS THE SQUARES
-                    if((Piece.PointsThatLeadToCheck.Contains(new Point(i, j)) || Piece.FuturePointsThatLeadToCheck.Contains(new Point(i, j))) && Turn != Turn.Player1End && Turn != Turn.Player2End)
+                    if ((Piece.PointsThatLeadToCheck.Contains(new Point(i, j)) || Piece.FuturePointsThatLeadToCheck.Contains(new Point(i, j))) && Turn != Turn.Player1End && Turn != Turn.Player2End)
                     {
                         Texture2D circle = ContentService.Instance.Textures["Pinned"];
                         Vector2 origin = new Vector2(circle.Width / 2, circle.Height / 2);
@@ -238,20 +270,23 @@ namespace Chess.Models
                     }
                 }
             }
-            for (int i = 0; i < 8; i++)
+            if (!Stalemate && !Checkmate)
             {
-                for (int j = 0; j < 8; j++)
+                for (int i = 0; i < 8; i++)
                 {
-                    Vector2 drawCenter = grid[i, j].Location + new Vector2(grid[i, j].Width, grid[i, j].Height) * 0.5f;
-                    clouds[i, j].Draw(drawCenter, spriteBatch);
+                    for (int j = 0; j < 8; j++)
+                    {
+                        Vector2 drawCenter = grid[i, j].Location + new Vector2(grid[i, j].Width, grid[i, j].Height) * 0.5f;
+                        clouds[i, j].Draw(drawCenter, spriteBatch);
+                    }
                 }
-            }
-            for (int i = 0; i < 8; i++)
-            {
-                for (int j = 0; j < 8; j++)
+                for (int i = 0; i < 8; i++)
                 {
-                    Vector2 drawCenter = grid[i, j].Location + new Vector2(grid[i, j].Width, grid[i, j].Height) * 0.5f;
-                    clouds[i, j].Draw(drawCenter, spriteBatch, true);
+                    for (int j = 0; j < 8; j++)
+                    {
+                        Vector2 drawCenter = grid[i, j].Location + new Vector2(grid[i, j].Width, grid[i, j].Height) * 0.5f;
+                        clouds[i, j].Draw(drawCenter, spriteBatch, true);
+                    }
                 }
             }
             whites.Draw(spriteBatch); //THIS DRAWS THE PIECES
@@ -279,6 +314,24 @@ namespace Chess.Models
                     spriteBatch.Draw(spaceBar, bottomLeft + circular, frame, Color.Black, 0f, origin, 1f, SpriteEffects.None, 0f);
                 }
                 spriteBatch.Draw(spaceBar, bottomLeft, frame, Color.WhiteSmoke, 0f, origin, 1f, SpriteEffects.None, 0f);
+            }
+            else if(Checkmate || Stalemate)
+            {
+                Vector2 middle = new Vector2(400, 400);
+                Texture2D CM = ContentService.Instance.Textures["Checkmate"];
+                Texture2D SM = ContentService.Instance.Textures["Stalemate"];
+                Texture2D useTexture = CM;
+                if(Stalemate)
+                {
+                    useTexture = SM;
+                }
+                Vector2 origin = new Vector2(CM.Width / 2, CM.Height / 2);
+                for (int i = 0; i < 20; i++)
+                {
+                    Vector2 circular = new Vector2(7, 0).RotatedBy(MathHelper.ToRadians(i * 18));
+                    spriteBatch.Draw(useTexture, middle + circular, null, Color.Black, 0f, origin, 1.5f, SpriteEffects.None, 0f);
+                }
+                spriteBatch.Draw(useTexture, middle, null, Color.WhiteSmoke, 0f, origin, 1.5f, SpriteEffects.None, 0f);
             }
         }
         public void DrawNumber(Vector2 pos, SpriteBatch spriteBatch, int num)

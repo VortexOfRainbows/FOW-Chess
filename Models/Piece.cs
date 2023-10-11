@@ -76,6 +76,8 @@ namespace Chess.Models
         }
         public bool IsVisible()
         {
+            if (board.Checkmate || board.Stalemate)
+                return true;
             if (IsNextPlayersPiece())
                 return true;
             foreach(Point p in VisiblePoints)
@@ -172,6 +174,10 @@ namespace Chess.Models
             {
                 legals[i].Draw(spriteBatch);
             }
+        }
+        public bool HasLegalMoves()
+        {
+            return legals.Count > 0;
         }
     }
 }

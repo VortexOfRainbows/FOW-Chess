@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.Tracing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -76,10 +77,13 @@ namespace Chess.Models.Pieces
             }
             return false;
         }
-
+        public bool InCheck()
+        {
+            return PointsThatLeadToCheck.Contains(new Point(this.Row, this.Col)) || VisiblePointsThatLeadToCheck.Contains(new Point(this.Row, this.Col));
+        }
         protected void AddCastlingMove(Piece p, int col, int secol)
         {
-            if(PointsThatLeadToCheck.Contains(new Point(this.Row, this.Col)) || VisiblePointsThatLeadToCheck.Contains(new Point(this.Row, this.Col)))
+            if(InCheck())
             {
                 return;
             }

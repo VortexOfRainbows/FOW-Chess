@@ -47,3 +47,5 @@ C:\Users\vorte\Desktop\FOW-Chess\bin\Debug\net6.0-windows\Content\Sprites\Ready.
 C:\Users\vorte\Desktop\FOW-Chess\bin\Debug\net6.0-windows\Content\Sprites\FilledCircle.xnb
 C:\Users\vorte\Desktop\FOW-Chess\bin\Debug\net6.0-windows\Content\Sprites\Pinned.xnb
 C:\Users\vorte\Desktop\FOW-Chess\bin\Debug\net6.0-windows\Content\Sprites\Danger.xnb
+C:\Users\vorte\Desktop\FOW-Chess\bin\Debug\net6.0-windows\Content\Sprites\Checkmate.xnb
+C:\Users\vorte\Desktop\FOW-Chess\bin\Debug\net6.0-windows\Content\Sprites\Stalemate.xnb
